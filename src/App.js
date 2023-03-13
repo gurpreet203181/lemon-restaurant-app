@@ -1,25 +1,76 @@
-import logo from './logo.svg';
-import './App.css';
+import { MantineProvider } from "@mantine/core";
+import { BrowserRouter as Router } from "react-router-dom";
+import RootRoute from "src/routes";
+import { NotificationsProvider } from "@mantine/notifications";
+import { StateContextProvider } from "src/contexts";
+import { AppShell } from "@mantine/core";
+import { Header, Footer, Navbar } from "src/components";
+import { StateContext } from "src/contexts";
+import {
+  IconBuildingWarehouse,
+  IconHome,
+  IconInfoSquareRounded,
+  IconLogin,
+  IconNotebook,
+  IconTruckDelivery,
+  TablerIcon,
+} from "@tabler/icons";
+import React from "react";
 
-function App() {
+const navLinks = [
+  {
+    icon: IconHome,
+    title: "Home",
+    link: "/",
+  },
+  {
+    icon: IconInfoSquareRounded,
+    title: "About",
+    link: "/about",
+  },
+  {
+    icon: IconNotebook,
+    title: "Menu",
+    link: "/menu",
+  },
+  {
+    icon: IconBuildingWarehouse,
+    title: "Reservations",
+    link: "/reservations",
+  },
+  {
+    icon: IconTruckDelivery,
+    title: "Order Online",
+    link: "/order-online",
+  },
+  {
+    icon: IconLogin,
+    title: "Login",
+    link: "/login",
+  },
+];
+
+const App = () => {
+  const { openMenu } = React.useContext(StateContext);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <MantineProvider withGlobalStyles withNormalizeCSS>
+      <StateContextProvider>
+        <NotificationsProvider>
+          <Router>
+            <AppShell
+              header={<Header navLinks={navLinks} />}
+              navbar={<Navbar open={openMenu} navLinks={navLinks} />}
+              footer={<Footer />}
+              styles={{ main: { paddingLeft: 0, paddingRight: 0 } }}
+            >
+              <RootRoute />
+            </AppShell>
+          </Router>
+        </NotificationsProvider>
+      </StateContextProvider>
+    </MantineProvider>
   );
-}
+};
 
 export default App;
